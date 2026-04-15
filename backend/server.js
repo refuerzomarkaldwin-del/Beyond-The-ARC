@@ -20,7 +20,7 @@ connectDB();
 app.use(cors({ 
   origin: [ 
     'http://localhost:3000',                    // Local development
-    'https://basketball-portfolio-beige.vercel.app'   // Your live Vercel URL
+    'https://beyond-the-arc-topaz.vercel.app'   // Your live Vercel URL
   ], 
   credentials: true 
 }));
