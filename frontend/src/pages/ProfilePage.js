@@ -12,6 +12,15 @@ const ProfilePage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Helper function to get profile picture URL
+  const getProfilePicUrl = () => {
+    if (user?.profilePic) {
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+      return `${backendUrl}/uploads/${user.profilePic}`;
+    }
+    return `https://ui-avatars.com/api/?background=ff9933&color=fff&name=${encodeURIComponent(user?.name || 'User')}`;
+  };
+
   // Handle profile update with image
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
@@ -63,9 +72,7 @@ const ProfilePage = () => {
   };
 
   // Get profile picture URL
-  const profilePicUrl = user?.profilePic 
-    ? `http://localhost:5000/uploads/${user.profilePic}`
-    : 'https://ui-avatars.com/api/?background=ff9933&color=fff&name=' + encodeURIComponent(user?.name || 'User');
+  const profilePicUrl = getProfilePicUrl();
 
   return (
     <section className="form-container">

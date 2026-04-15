@@ -22,6 +22,13 @@ const PostPage = () => {
     angry: 0
   });
 
+  // Helper function to get image URL
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+    return `${backendUrl}/uploads/${imagePath}`;
+  };
+
   // Reaction icons and labels
   const reactions = [
     { type: 'like', icon: '👍', label: 'Like', color: '#3b82f6' },
@@ -200,7 +207,7 @@ const PostPage = () => {
 
       {post.image && (
         <img 
-          src={`http://localhost:5000/uploads/${post.image}`}
+          src={getImageUrl(post.image)}
           alt={post.title}
           style={{ width: '100%', maxHeight: '400px', objectFit: 'cover', borderRadius: '1rem', marginBottom: '2rem' }}
         />

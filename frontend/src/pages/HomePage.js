@@ -13,6 +13,13 @@ const HomePage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  // Helper function to get image URL
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+    return `${backendUrl}/uploads/${imagePath}`;
+  };
+
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -397,7 +404,7 @@ const HomePage = () => {
               <div key={post._id} className="details-container" style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', height: '100%' }}>
                 {post.image && (
                   <img 
-                    src={`http://localhost:5000/uploads/${post.image}`} 
+                    src={getImageUrl(post.image)}
                     alt={post.title}
                     style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '1rem', marginBottom: '1rem' }}
                   />

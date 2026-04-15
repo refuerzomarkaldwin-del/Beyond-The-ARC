@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import API from '../api/axios';
 
 const EditPostPage = () => {
   const { id } = useParams();
-  const { user } = useAuth();
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -13,6 +11,13 @@ const EditPostPage = () => {
   const [currentImage, setCurrentImage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+
+  // Helper function to get image URL
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+    return `${backendUrl}/uploads/${imagePath}`;
+  };
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -58,7 +63,7 @@ const EditPostPage = () => {
         <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
           <p>Current image:</p>
           <img 
-            src={`http://localhost:5000/uploads/${currentImage}`}
+            src={getImageUrl(currentImage)}
             alt="Current"
             style={{ maxWidth: '200px', borderRadius: '0.5rem' }}
           />
@@ -85,16 +90,18 @@ const EditPostPage = () => {
           />
         </div>
         
-        {user?.role === 'admin' && (
-          <div>
-            <label>Replace Image (Admin only):</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setImage(e.target.files[0])}
-            />
-          </div>
-        )}
+        {/* Allow all logged-in users to upload/change images */}
+        <div>
+          <label>Upload Cover Image (Optional):</label>
+          <input
+            type="file"
+            accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+            onChange={(e) => setImage(e.target.files[0])}
+          />
+          <small style={{ color: 'var(--muted)', display: 'block', marginTop: '0.25rem' }}>
+            Max 5MB. Upload a new image to replace the current one.
+          </small>
+        </div>
         
         <button className="btn btn-color-1" type="submit">Update Post</button>
       </form>
